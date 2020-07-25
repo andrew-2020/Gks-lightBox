@@ -1,0 +1,139 @@
+.lightbox-overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100vh;
+}
+.compensate-for-scrolbar{
+  margin-right: var(--scroll_width);
+}
+.gks-overlay-hdn {
+  display:none;
+}
+.yellow {
+  background-color: rgba(255, 255, 102 , 0.4);
+}
+
+.blue {
+  background-color: rgba(0, 0, 255 , 0.4);
+}
+
+.black {
+  background-color: rgba(0, 0, 0 , 0.4);
+}
+
+.single-img , .gallery-img {
+  /* max-height: 80vh; */
+  max-width: 100%;
+}
+.preloader-spinner::before {
+  content: '';
+  display: block;
+  width: 100vh;
+  height: 100vh;
+
+  background-image: url(../images/spinner.gif);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  width: 100px;
+  height: 100px;
+
+}
+.hide-till-load {
+  visibility: hidden;
+
+}
+.overlay-container {
+  width: 100%;
+  background-color: inherit;
+}
+.gallery-section {
+
+  display: flex;
+  flex-flow: row wrap;
+}
+.gallery-section img {
+  width: 50px;
+}
+.disableScrolling {
+  overflow-y: hidden;
+}
+.box-wrapper {
+  background-color: inherit;
+}
+.gksbox-stage {
+  background-color: inherit;
+  display: flex;
+  padding: 50px 0 70px 0;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  overflow-x: scroll;
+  background-color: inherit;
+}
+.gksbox-slide {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 50vh 0;
+  display: flex;
+  justify-content: center;
+}
+.gksbox-content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transform-origin: left;
+  max-width: 99.99%;
+}
+.gksbox-infobar , .gksbox-toolbar {
+  position: absolute;
+}
+.gksbox-infobar {
+  top: 0;
+  left: 0;
+  background-color: red;
+}
+.gksbox-toolbar {
+  display: flex;
+  top: 0;
+  right: 0;
+  background-color: lightgreen;
+  z-index: 9001;
+}
+.svg-box {
+  width: 44px;
+  height: 44px;
+}
+.toolsbar-svg {
+  padding: 7px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  margin-left: 1px;
+  background-color: yellow;
+}
+.navArrow {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  cursor: pointer;
+}
+.nxtArrow {
+  right: 0;
+}
+.fa-w-10 {
+  width: 100%;
+  height: 100%;
+}
+@keyframes andrew {
+  
+}
