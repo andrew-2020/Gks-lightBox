@@ -28,6 +28,7 @@
 .single-img , .gallery-img {
   /* max-height: 80vh; */
   max-width: 100%;
+  user-select:none;
 }
 .preloader-spinner::before {
   content: '';

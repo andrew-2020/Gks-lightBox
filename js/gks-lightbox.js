@@ -116,8 +116,9 @@ var addClassName_toGrandParent = function (object , name){
 
 var removeClassName_fromGrandParent = function (object , name){
   var nodeName = " " + object.parentNode.parentNode.className;
-  nodeName.replace(nodeName , "");
-  object.parentNode.parentNode.className = name;
+  console.log(nodeName);
+  nodeName = nodeName.replace(name , "");
+  object.parentNode.parentNode.className = nodeName;
 }
 
 // curcial functions
@@ -232,30 +233,6 @@ function returnedOptions(options) {
   }
   return NewOpt;
 }
-//
-// function imgPreloader (sourceImg , imgObj , imgSrc , callback){
-//   var mySrc = imgObj.getAttribute('src');
-//   console.log(mySrc);
-//   if (mySrc === "" ) {
-//     imgObj.parentNode.parentNode.classList.add('preloader-spinner');
-//     imgObj.classList.add('hide-till-load');
-//     imgObj.src = imgSrc;
-//     console.log('preloader added');
-//     imgObj.onload = function () {
-//       callback(imgObj);
-//       imgObj.onload = function (){}
-//     }
-//     return true;
-//
-//   }else {
-//     console.log('image already loaded');
-//     setFirstPos(sourceImg , imgObj , 'gks-first-look');
-//     setSecPos(imgObj , 'gks-first-look' );
-//     return false;
-//
-//   }
-//
-// }
 
 function imgPreloader (sourceImg , imgObj , imgSrc , callback ){
   var mySrc = imgObj.getAttribute('src');
@@ -280,73 +257,73 @@ function preloadingSpinner (imgObj){
   console.log('preloader removed');
 }
 
-function setFirstPos(parentImg , childImg ,  childImgName){
-  remStyle('scale-from-parent');
-  var windowWidth = window.innerWidth;
-  var windowHeight  = window.innerHeight;
-  var originalWidth = childImg.naturalWidth;
-  var originalHeight = childImg.naturalHeight;
-  console.log(originalWidth);
-  console.log(childImg);
-  // var top ='top:' + (parentImg.getBoundingClientRect().top / windowHeight) * 100 + '%;';
-  // var left = 'left:'+  (parentImg.getBoundingClientRect().left / windowWidth ) * 100 + '%;';
-  var translatey = parentImg.getBoundingClientRect().top + 'px';
-  var translatex =  parentImg.getBoundingClientRect().left + 'px';
-  // var top = 'top:0px;';
-  // var left = 'left:0px;';
-  var height = 'height:' +  parentImg.getBoundingClientRect().height + 'px;';
-  var width = 'width:' +  parentImg.getBoundingClientRect().width + 'px;';
-  // var scaley = parentImg.getBoundingClientRect().height / originalHeight ;
-  // var scalex =  parentImg.getBoundingClientRect().width / originalWidth  ;
-  // scalex = 1;scaley = 1;
-  var transform = 'transform: translate('+ translatex + ',' + translatey + ') ;'
-  var transition = 'transition: 0s;';
-  var styling = '.' + childImgName + '{' +  width + height +  transform + transition + '}';
-  embedStyle('body' , 'on-parent' , styling);
-}
-
-function setSecPos (childImgObj , childImgName){
-
-  console.log('making second Pos');
-  console.log(childImgObj);
-  window.setTimeout(function(){
-
-    var windowWidth = window.innerWidth;
-    var windowHeight  = window.innerHeight;
-    var originalWidth = childImgObj.naturalWidth;
-    var originalHeight = childImgObj.naturalHeight;
-    var aspRatio = originalWidth / originalHeight;
-    var width = 0;
-    var height = 0;
-    if (originalWidth > windowWidth) {
-      if( 0.95 * windowHeight * aspRatio  > windowWidth) {
-        width = windowWidth;
-        height = windowWidth / aspRatio;
-      }else {
-        height = 0.95 * windowHeight;
-        width = height * aspRatio;
-      }
-    }else {
-      if( originalHeight > 0.95 * windowHeight ) {
-        height = 0.95 * windowHeight;
-        width = height * aspRatio;
-      }else {
-        width = originalWidth;
-        height =  originalHeight;
-      }
-    }
-    var translatex = (windowWidth - width) / 2  + 'px' ;
-    var translatey = (windowHeight - height) / 2 + 'px'  ;
-    var transform = 'transform: translate(' + translatex  + ' , '  + translatey + ');'
-    height = 'height:' + height + 'px;';
-    width = 'width:'+  width + 'px;';
-    var transition = 'transition: 300ms linear;';
-    var styling = '.' + childImgName + '{' + width + height   +  transform + transition + '}';
-    embedStyle('body' , 'scale-from-parent' , styling);
-    remStyle('on-parent');
-    console.log('finishing second Pos');
-  } , 10);
-}
+// function setFirstPos(parentImg , childImg ,  childImgName){
+//   remStyle('scale-from-parent');
+//   var windowWidth = window.innerWidth;
+//   var windowHeight  = window.innerHeight;
+//   var originalWidth = childImg.naturalWidth;
+//   var originalHeight = childImg.naturalHeight;
+//   console.log(originalWidth);
+//   console.log(childImg);
+//   // var top ='top:' + (parentImg.getBoundingClientRect().top / windowHeight) * 100 + '%;';
+//   // var left = 'left:'+  (parentImg.getBoundingClientRect().left / windowWidth ) * 100 + '%;';
+//   var translatey = parentImg.getBoundingClientRect().top + 'px';
+//   var translatex =  parentImg.getBoundingClientRect().left + 'px';
+//   // var top = 'top:0px;';
+//   // var left = 'left:0px;';
+//   var height = 'height:' +  parentImg.getBoundingClientRect().height + 'px;';
+//   var width = 'width:' +  parentImg.getBoundingClientRect().width + 'px;';
+//   // var scaley = parentImg.getBoundingClientRect().height / originalHeight ;
+//   // var scalex =  parentImg.getBoundingClientRect().width / originalWidth  ;
+//   // scalex = 1;scaley = 1;
+//   var transform = 'transform: translate('+ translatex + ',' + translatey + ') ;'
+//   var transition = 'transition: 0s;';
+//   var styling = '.' + childImgName + '{' +  width + height +  transform + transition + '}';
+//   embedStyle('body' , 'on-parent' , styling);
+// }
+//
+// function setSecPos (childImgObj , childImgName){
+//
+//   console.log('making second Pos');
+//   console.log(childImgObj);
+//   window.setTimeout(function(){
+//
+//     var windowWidth = window.innerWidth;
+//     var windowHeight  = window.innerHeight;
+//     var originalWidth = childImgObj.naturalWidth;
+//     var originalHeight = childImgObj.naturalHeight;
+//     var aspRatio = originalWidth / originalHeight;
+//     var width = 0;
+//     var height = 0;
+//     if (originalWidth > windowWidth) {
+//       if( 0.95 * windowHeight * aspRatio  > windowWidth) {
+//         width = windowWidth;
+//         height = windowWidth / aspRatio;
+//       }else {
+//         height = 0.95 * windowHeight;
+//         width = height * aspRatio;
+//       }
+//     }else {
+//       if( originalHeight > 0.95 * windowHeight ) {
+//         height = 0.95 * windowHeight;
+//         width = height * aspRatio;
+//       }else {
+//         width = originalWidth;
+//         height =  originalHeight;
+//       }
+//     }
+//     var translatex = (windowWidth - width) / 2  + 'px' ;
+//     var translatey = (windowHeight - height) / 2 + 'px'  ;
+//     var transform = 'transform: translate(' + translatex  + ' , '  + translatey + ');'
+//     height = 'height:' + height + 'px;';
+//     width = 'width:'+  width + 'px;';
+//     var transition = 'transition: 300ms linear;';
+//     var styling = '.' + childImgName + '{' + width + height   +  transform + transition + '}';
+//     embedStyle('body' , 'scale-from-parent' , styling);
+//     remStyle('on-parent');
+//     console.log('finishing second Pos');
+//   } , 10);
+// }
 
 
 /* parent image is the image showed in page it self */
@@ -395,8 +372,8 @@ function start_up (parentImg , childImg ,  childImgName){
   var translatey2 = Math.round((windowHeight - height2) / 2 ) + 'px'  ;
   var scalex2 = width2 / parentImg.getBoundingClientRect().width;
   var scaley2 = height2 / parentImg.getBoundingClientRect().height;
-  var transform1 = 'transform: translate('+ translatex1 + ',' + translatey1 + ') ;'
-  var transform2 = 'transform: translate(' + translatex2  + ','  + translatey2 + '  );'
+  var transform1 = 'transform: translate('+ translatex1 + ',' + translatey1 + ');' + 'transform: translate3d('+ translatex1 + ',' + translatey1 + ', 0px' + ');';
+  var transform2 = 'transform: translate('+ translatex2 + ',' + translatey2 + ');' + 'transform: translate3d(' + translatex2  + ','  + translatey2 + ', 0px' + ');';
   height2 = 'height:' + height2 + 'px;';
   width2 = 'width:'+  width2 + 'px;';
   var transition2 = 'transition: 300ms linear;';
@@ -404,22 +381,8 @@ function start_up (parentImg , childImg ,  childImgName){
   var styling = '@keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
   + '5%{' + transform1 +  height1 + width1 + '}'
   +'100%{' + transform2 +  height2 + width2 + '}}';
-  // styling += '@-webkit-keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
-  // + '5%{' + transform1 +  height1 + width1 + '}'
-  // +'100%{' + transform2 +  height2 + width2 + '}}';
-  // styling += '@-moz-keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
-  // + '5%{' + transform1 +  height1 + width1 + '}'
-  // +'100%{' + transform2 +  height2 + width2 + '}}';
   styling += '.' + childImgName + '{';
-  // styling += '-webkit-animation-duration: 0.5s;';
-  // styling += '-webkit-animation-name: imgIntro;';
-  // styling += '-webkit-animation-direction: normal;';
-  // styling += '-webkit-animation-fill-mode: forwards;';
-  // styling += '-moz-animation-name: imgIntro;';
-  // styling += '-moz-animation-duration: 0.5s;';
-  // styling += '-moz-animation-direction: normal;' ;
-  // styling += '-moz-animation-fill-mode: forwards;';
-  styling += '-webkit-' + transform2;
+  styling += transform2;
   styling += height2;
   styling += width2;
   styling += 'animation-name: imgIntro;';
@@ -566,7 +529,6 @@ Gks_lightbox.prototype.register_components = function () {
 
 };
 
-// WARNING: this is test method
 Gks_lightbox.prototype.collecting_img = function () {
   var self = this;
   self.imgs.forEach( function (sourceImg , i) {
