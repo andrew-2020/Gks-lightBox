@@ -3,8 +3,10 @@
 /*
 
 */
+/* general declarations */
+var bodyElement = document.getElementsByTagName('body')[0];
 
-const Defaults = {
+var Defaults = {
 
     layout: 'single',
     template: '<!-- single image template --> <div class="overlay-container" > <div class="box-wrapper"> <div class="close-gks-box">&times;</div> <div class="gksbox-stage" > <div class="gksbox-slide" > <div class="gksbox-content"> <img class="single-img" src=""></div> </div> </div> <div class="img-numbering" ></div>  </div> </div>' ,
@@ -44,33 +46,83 @@ if (!NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
 }
 
+HTMLElement.prototype.addClassName = function (param) {
+         if (!HTMLElement.classList) {
+           name = this.className + " " + param;
+           this.className = name;
+         }else {
+           this.classList.add(param);
+         }
+     }
+
+HTMLElement.prototype.removeClassName = function (param) {
+        if (!HTMLElement.classList) {
+          name = this.className;
+          name = name.replace(param , "");
+          this.className = name;
+        }else {
+          this.classList.remove(param);
+        }
+    }
+
 HTMLElement.prototype.addMultipleClassNames = function (names) {
-  for (let i = 0; i < names.length; i++) {
-    this.classList.add(names[i]);
+  for (var i = 0; i < names.length; i++) {
+      this.addClassName(names[i]);
   }
 }
 
 HTMLElement.prototype.removeMultipleClassNames = function (names) {
-  for (let i = 0; i < names.length; i++) {
-    this.classList.remove(names[i]);
+  for (var i = 0; i < names.length; i++) {
+      this.removeClassName(names[i]);
   }
 }
 
-document.body.addMultipleClassNames = function (names) {
-  for (let i = 0; i < names.length; i++) {
-    this.classList.add(names[i]);
+bodyElement.addClassName = function (param) {
+         if (!HTMLElement.classList) {
+           console.log('adding class name');
+           name = bodyElement.className + " " + param;
+           bodyElement.className = name;
+           console.log('adding class name');
+         }else {
+           bodyElement.classList.add(param);
+         }
+     }
+
+bodyElement.removeClassName = function (param) {
+       if (!HTMLElement.classList) {
+         name = bodyElement.className;
+         name = name.replace(param , "");
+         bodyElement.className = name;
+       }else {
+         bodyElement.classList.remove(param);
+       }
+   }
+
+bodyElement.addMultipleClassNames = function (names) {
+  for (var i = 0; i < names.length; i++) {
+    bodyElement.addClassName(names[i]);
   }
 }
 
-document.body.removeMultipleClassNames = function (names) {
-  for (let i = 0; i < names.length; i++) {
-    this.classList.remove(names[i]);
+bodyElement.removeMultipleClassNames = function (names) {
+  for (var i = 0; i < names.length; i++) {
+    bodyElement.removeClassName(names[i]);
   }
+}
+
+var addClassName_toGrandParent = function (object , name){
+  object.parentNode.parentNode.className += " " + name;
+}
+
+var removeClassName_fromGrandParent = function (object , name){
+  var nodeName = " " + object.parentNode.parentNode.className;
+  nodeName.replace(nodeName , "");
+  object.parentNode.parentNode.className = name;
 }
 
 // curcial functions
 function $el (selector){
-   let myEl ;
+   var myEl ;
    if (selector[0] === '#' && selector.indexOf('.') === -1) {
      return  document.getElementById(selector);
    }else if ( selector.indexOf('.') >= 0 ) {
@@ -90,10 +142,10 @@ function $el (selector){
  }
 
 function handelingDefaults(options , myself) {
-    const t = 'template' in options;
-    const l = 'layout' in options;
-    // const layoutFetchced = options.layout;
-    const templateFetched = options.template;
+    var t = 'template' in options;
+    var l = 'layout' in options;
+    // var layoutFetchced = options.layout;
+    var templateFetched = options.template;
     if (l) {
         if (options.layout === 'single') {
             if (t) {
@@ -114,8 +166,8 @@ function handelingDefaults(options , myself) {
 }
 
 function embedStyle(tagName , styleName , styling){
-  let embedded_style = document.createElement('style');
-  embedded_style.classList.add(styleName);
+  var embedded_style = document.createElement('style');
+  embedded_style.addClassName(styleName);
   document.getElementsByTagName(tagName)[0].appendChild(embedded_style);
   embedded_style.innerHTML += styling;
   console.log(styleName + ' Style Embedded');
@@ -123,7 +175,7 @@ function embedStyle(tagName , styleName , styling){
 
 function remStyle(styleClassName){
 
-  let style = $el('.' + styleClassName);
+  var style = $el('.' + styleClassName);
 
   if (NodeList.prototype.isPrototypeOf(style)) {
     if (style.length > 0) {
@@ -143,13 +195,13 @@ function remStyle(styleClassName){
 function handelingScrolling(disableScrolling) {
 
     if (disableScrolling) {
-        const scrollWidth = (window.innerWidth - document.documentElement.clientWidth)  + 'px';
-        const styling = '.compensate-for-scrolbar{margin-right:'
+        var scrollWidth = (window.innerWidth - document.documentElement.clientWidth)  + 'px';
+        var styling = '.compensate-for-scrolbar{margin-right:'
                       + scrollWidth + '}';
 
         embedStyle('head' ,'gks-scroll-styling' ,  styling);
 
-        document.body.addMultipleClassNames(['disableScrolling' , 'compensate-for-scrolbar']);
+        bodyElement.addMultipleClassNames(['disableScrolling' , 'compensate-for-scrolbar']);
     }
 }
 
@@ -162,13 +214,13 @@ function updateSlideWidth(myself , c , i) {
 
 function returnedOptions(options) {
 
-  const defValues = Object.values(Defaults);
-  const optValues = Object.values(options);
-  const defKeys = Object.keys(Defaults);
-  const optKeys = Object.keys(options);
-  let NewOpt = {};
-  for (let d = 0; d < defKeys.length; d++) {
-    for (let o = 0; o < optKeys.length; o++) {
+  var defValues = Object.values(Defaults);
+  var optValues = Object.values(options);
+  var defKeys = Object.keys(Defaults);
+  var optKeys = Object.keys(options);
+  var NewOpt = {};
+  for (var d = 0; d < defKeys.length; d++) {
+    for (var o = 0; o < optKeys.length; o++) {
       if (defKeys[d] === optKeys[o]) {
         NewOpt[optKeys[o]] = optValues[o];
         break;
@@ -182,7 +234,7 @@ function returnedOptions(options) {
 }
 //
 // function imgPreloader (sourceImg , imgObj , imgSrc , callback){
-//   let mySrc = imgObj.getAttribute('src');
+//   var mySrc = imgObj.getAttribute('src');
 //   console.log(mySrc);
 //   if (mySrc === "" ) {
 //     imgObj.parentNode.parentNode.classList.add('preloader-spinner');
@@ -206,11 +258,11 @@ function returnedOptions(options) {
 // }
 
 function imgPreloader (sourceImg , imgObj , imgSrc , callback ){
-  let mySrc = imgObj.getAttribute('src');
+  var mySrc = imgObj.getAttribute('src');
   console.log(mySrc);
   if (mySrc === "" || mySrc !==  imgSrc ) {
-    imgObj.parentNode.parentNode.classList.add('preloader-spinner');
-    imgObj.classList.add('hide-till-load');
+    addClassName_toGrandParent(imgObj , 'preloader-spinner');
+    imgObj.addClassName('hide-till-load');
     imgObj.src = imgSrc;
     console.log('preloader added');
 
@@ -223,33 +275,33 @@ function imgPreloader (sourceImg , imgObj , imgSrc , callback ){
 }
 
 function preloadingSpinner (imgObj){
-  imgObj.parentNode.parentNode.classList.remove('preloader-spinner');
-  imgObj.classList.remove('hide-till-load');
+  removeClassName_fromGrandParent(imgObj , 'preloader-spinner');
+  imgObj.removeClassName('hide-till-load');
   console.log('preloader removed');
 }
 
 function setFirstPos(parentImg , childImg ,  childImgName){
   remStyle('scale-from-parent');
-  let windowWidth = window.innerWidth;
-  let windowHeight  = window.innerHeight;
-  let originalWidth = childImg.naturalWidth;
-  let originalHeight = childImg.naturalHeight;
+  var windowWidth = window.innerWidth;
+  var windowHeight  = window.innerHeight;
+  var originalWidth = childImg.naturalWidth;
+  var originalHeight = childImg.naturalHeight;
   console.log(originalWidth);
   console.log(childImg);
-  // let top ='top:' + (parentImg.getBoundingClientRect().top / windowHeight) * 100 + '%;';
-  // let left = 'left:'+  (parentImg.getBoundingClientRect().left / windowWidth ) * 100 + '%;';
-  let translatey = parentImg.getBoundingClientRect().top + 'px';
-  let translatex =  parentImg.getBoundingClientRect().left + 'px';
-  // let top = 'top:0px;';
-  // let left = 'left:0px;';
-  let height = 'height:' +  parentImg.getBoundingClientRect().height + 'px;';
-  let width = 'width:' +  parentImg.getBoundingClientRect().width + 'px;';
-  // let scaley = parentImg.getBoundingClientRect().height / originalHeight ;
-  // let scalex =  parentImg.getBoundingClientRect().width / originalWidth  ;
+  // var top ='top:' + (parentImg.getBoundingClientRect().top / windowHeight) * 100 + '%;';
+  // var left = 'left:'+  (parentImg.getBoundingClientRect().left / windowWidth ) * 100 + '%;';
+  var translatey = parentImg.getBoundingClientRect().top + 'px';
+  var translatex =  parentImg.getBoundingClientRect().left + 'px';
+  // var top = 'top:0px;';
+  // var left = 'left:0px;';
+  var height = 'height:' +  parentImg.getBoundingClientRect().height + 'px;';
+  var width = 'width:' +  parentImg.getBoundingClientRect().width + 'px;';
+  // var scaley = parentImg.getBoundingClientRect().height / originalHeight ;
+  // var scalex =  parentImg.getBoundingClientRect().width / originalWidth  ;
   // scalex = 1;scaley = 1;
-  let transform = 'transform: translate('+ translatex + ',' + translatey + ') ;'
-  let transition = 'transition: 0s;';
-  let styling = '.' + childImgName + '{' +  width + height +  transform + transition + '}';
+  var transform = 'transform: translate('+ translatex + ',' + translatey + ') ;'
+  var transition = 'transition: 0s;';
+  var styling = '.' + childImgName + '{' +  width + height +  transform + transition + '}';
   embedStyle('body' , 'on-parent' , styling);
 }
 
@@ -259,13 +311,13 @@ function setSecPos (childImgObj , childImgName){
   console.log(childImgObj);
   window.setTimeout(function(){
 
-    let windowWidth = window.innerWidth;
-    let windowHeight  = window.innerHeight;
-    let originalWidth = childImgObj.naturalWidth;
-    let originalHeight = childImgObj.naturalHeight;
-    let aspRatio = originalWidth / originalHeight;
-    let width = 0;
-    let height = 0;
+    var windowWidth = window.innerWidth;
+    var windowHeight  = window.innerHeight;
+    var originalWidth = childImgObj.naturalWidth;
+    var originalHeight = childImgObj.naturalHeight;
+    var aspRatio = originalWidth / originalHeight;
+    var width = 0;
+    var height = 0;
     if (originalWidth > windowWidth) {
       if( 0.95 * windowHeight * aspRatio  > windowWidth) {
         width = windowWidth;
@@ -283,13 +335,13 @@ function setSecPos (childImgObj , childImgName){
         height =  originalHeight;
       }
     }
-    let translatex = (windowWidth - width) / 2  + 'px' ;
-    let translatey = (windowHeight - height) / 2 + 'px'  ;
-    let transform = 'transform: translate(' + translatex  + ' , '  + translatey + ');'
+    var translatex = (windowWidth - width) / 2  + 'px' ;
+    var translatey = (windowHeight - height) / 2 + 'px'  ;
+    var transform = 'transform: translate(' + translatex  + ' , '  + translatey + ');'
     height = 'height:' + height + 'px;';
     width = 'width:'+  width + 'px;';
-    let transition = 'transition: 300ms linear;';
-    let styling = '.' + childImgName + '{' + width + height   +  transform + transition + '}';
+    var transition = 'transition: 300ms linear;';
+    var styling = '.' + childImgName + '{' + width + height   +  transform + transition + '}';
     embedStyle('body' , 'scale-from-parent' , styling);
     remStyle('on-parent');
     console.log('finishing second Pos');
@@ -303,24 +355,25 @@ function setSecPos (childImgObj , childImgName){
 function start_up (parentImg , childImg ,  childImgName){
   remStyle('introStyling');
   console.log('this is a callback function ');
-  childImg.parentNode.parentNode.classList.remove('preloader-spinner');
-  childImg.classList.remove('hide-till-load');
+
+  removeClassName_fromGrandParent(childImg , 'preloader-spinner' );
+  childImg.removeClassName('hide-till-load');
   console.log('preloader removed');
-  let windowWidth = window.innerWidth;
-  let windowHeight  = window.innerHeight;
-  let originalWidth = childImg.naturalWidth;
-  let originalHeight = childImg.naturalHeight;
-  let translatey1 = Math.round(parentImg.getBoundingClientRect().top) + 'px';
-  let translatex1 =  Math.round(parentImg.getBoundingClientRect().left) + 'px';
-  let height1 = 'height:' +  parentImg.getBoundingClientRect().height + 'px;';
-  let width1 = 'width:' +  parentImg.getBoundingClientRect().width + 'px;';
-  let transition1 = 'transition: 0s;';
+  var windowWidth = window.innerWidth;
+  var windowHeight  = window.innerHeight;
+  var originalWidth = childImg.naturalWidth;
+  var originalHeight = childImg.naturalHeight;
+  var translatey1 = Math.round(parentImg.getBoundingClientRect().top) + 'px';
+  var translatex1 =  Math.round(parentImg.getBoundingClientRect().left) + 'px';
+  var height1 = 'height:' +  parentImg.getBoundingClientRect().height + 'px;';
+  var width1 = 'width:' +  parentImg.getBoundingClientRect().width + 'px;';
+  var transition1 = 'transition: 0s;';
   console.log(parentImg.getBoundingClientRect().height);
   console.log(parentImg.getBoundingClientRect().width);
 
-  let aspRatio = originalWidth / originalHeight;
-  let width2 = 0;
-  let height2 = 0;
+  var aspRatio = originalWidth / originalHeight;
+  var width2 = 0;
+  var height2 = 0;
   if (originalWidth > windowWidth) {
     if( 0.95 * windowHeight * aspRatio  > windowWidth) {
       width2 = Math.round(windowWidth);
@@ -338,17 +391,17 @@ function start_up (parentImg , childImg ,  childImgName){
       height2 =   Math.round(originalHeight);
     }
   }
-  let translatex2 = Math.round((windowWidth - width2) / 2 )  + 'px' ;
-  let translatey2 = Math.round((windowHeight - height2) / 2 ) + 'px'  ;
-  let scalex2 = width2 / parentImg.getBoundingClientRect().width;
-  let scaley2 = height2 / parentImg.getBoundingClientRect().height;
-  let transform1 = 'transform: translate('+ translatex1 + ',' + translatey1 + ') ;'
-  let transform2 = 'transform: translate(' + translatex2  + ','  + translatey2 + '  );'
+  var translatex2 = Math.round((windowWidth - width2) / 2 )  + 'px' ;
+  var translatey2 = Math.round((windowHeight - height2) / 2 ) + 'px'  ;
+  var scalex2 = width2 / parentImg.getBoundingClientRect().width;
+  var scaley2 = height2 / parentImg.getBoundingClientRect().height;
+  var transform1 = 'transform: translate('+ translatex1 + ',' + translatey1 + ') ;'
+  var transform2 = 'transform: translate(' + translatex2  + ','  + translatey2 + '  );'
   height2 = 'height:' + height2 + 'px;';
   width2 = 'width:'+  width2 + 'px;';
-  let transition2 = 'transition: 300ms linear;';
+  var transition2 = 'transition: 300ms linear;';
 
-  let styling = '@keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
+  var styling = '@keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
   + '5%{' + transform1 +  height1 + width1 + '}'
   +'100%{' + transform2 +  height2 + width2 + '}}';
   // styling += '@-webkit-keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
@@ -370,7 +423,7 @@ function start_up (parentImg , childImg ,  childImgName){
   styling += height2;
   styling += width2;
   styling += 'animation-name: imgIntro;';
-  styling += 'animation-duration: 0.3s;';
+  styling += 'animation-duration: 0.5s;';
   styling += 'animation-direction: normal;';
   styling += 'animation-fill-mode: forwards;' + '}'  ;
 
@@ -388,7 +441,7 @@ function goPrev (){
 
 // Initialising gks-lightbox object
 function Gks_lightbox(targetClass , options , bgColor ){
-    const self = this;
+    var self = this;
     this.targetClass = '.' + targetClass;
     this.id = targetClass + new Date().getTime();
     this.imgs = $el(this.targetClass);
@@ -427,20 +480,20 @@ function Gks_lightbox(targetClass , options , bgColor ){
 }
 
 Gks_lightbox.prototype.setting_templates = function () {
-  const self = this;
-  let closeBox = '<div class="svg-box" ><svg aria-hidden="true" focusable="false" class="times close-gks-box close-svg toolsbar-svg" viewBox="0 0 352 512"><path class=" close-gks-box close-path" fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></div>';
-  let playBox =   '<div class="svg-box" ><svg focusable="true" class="gks-box-play toolsbar-svg"  viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg></div>';
-  let galleryBox =   '<div class="svg-box" ><svg focusable="true" class="gks-box-gallery toolsbar-svg"  viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg></div>';
-  let zoomBox =   '<div class="svg-box" ><svg focusable="true" class="gks-box-zoom toolsbar-svg"  viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg></div>';
-  let infoBar = '<div class="gksbox-infobar" >This is the Info Bar</div>';
-  let toolBar = '<div class="gksbox-toolbar" >'+ zoomBox + playBox +galleryBox + closeBox + ' </div>';
-  let gksStage = ' <div class="gksbox-stage" > <div class="gksbox-slide" > <div class="gksbox-content"> <img class="single-img" src=""></div> </div> </div>';
-  let gksStageMulti = ' <div class="gksbox-stage" >'  + '<div class="gksbox-slide" > <div class="gksbox-content"> <img class="gallery-img" src=""></div> </div>'.repeat(self.nuOfImgs) + '</div>';
-  let imgNumbering = '<div class="img-numbering" ></div>';
-  let nxtArrow = '<svg class="svg-inline--fa fa-chevron-right fa-w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>';
-  let prevArrow = '<svg class="svg-inline--fa fa-chevron-left fa-w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg>';
-  let nxtArrowBox = '<div class="nxtArrow navArrow">' + nxtArrow + '</div>';
-  let prevArrowBox = '<div class="prevArrow navArrow">' + prevArrow + '</div>';
+  var self = this;
+  var closeBox = '<div class="svg-box" ><svg aria-hidden="true" focusable="false" class="times close-gks-box close-svg toolsbar-svg" viewBox="0 0 352 512"><path class=" close-gks-box close-path" fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></div>';
+  var playBox =   '<div class="svg-box" ><svg focusable="true" class="gks-box-play toolsbar-svg"  viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg></div>';
+  var galleryBox =   '<div class="svg-box" ><svg focusable="true" class="gks-box-gallery toolsbar-svg"  viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg></div>';
+  var zoomBox =   '<div class="svg-box" ><svg focusable="true" class="gks-box-zoom toolsbar-svg"  viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg></div>';
+  var infoBar = '<div class="gksbox-infobar" >This is the Info Bar</div>';
+  var toolBar = '<div class="gksbox-toolbar" >'+ zoomBox + playBox +galleryBox + closeBox + ' </div>';
+  var gksStage = ' <div class="gksbox-stage" > <div class="gksbox-slide" > <div class="gksbox-content"> <img class="single-img" src=""></div> </div> </div>';
+  var gksStageMulti = ' <div class="gksbox-stage" >'  + '<div class="gksbox-slide" > <div class="gksbox-content"> <img class="gallery-img" src=""></div> </div>'.repeat(self.nuOfImgs) + '</div>';
+  var imgNumbering = '<div class="img-numbering" ></div>';
+  var nxtArrow = '<svg class="svg-inline--fa fa-chevron-right fa-w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>';
+  var prevArrow = '<svg class="svg-inline--fa fa-chevron-left fa-w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg>';
+  var nxtArrowBox = '<div class="nxtArrow navArrow">' + nxtArrow + '</div>';
+  var prevArrowBox = '<div class="prevArrow navArrow">' + prevArrow + '</div>';
 
 
   if (this.options.layout === 'single') {
@@ -474,7 +527,7 @@ Gks_lightbox.prototype.init_lightbox = function() {
 };
 
 Gks_lightbox.prototype.gks_overlay = function() {
-  let desktop_paper = document.createElement('div');
+  var desktop_paper = document.createElement('div');
   desktop_paper.addMultipleClassNames(['lightbox-overlay' , 'gks-overlay-hdn']);
   desktop_paper.setAttribute('id' , this.id );
   desktop_paper.innerHTML = this.options.template;
@@ -497,12 +550,12 @@ Gks_lightbox.prototype.register_components = function () {
 
   if (this.options.layout === 'single') {
 
-        const single_pointer =  "#" + this.id +  " .single-img";
+        var single_pointer =  "#" + this.id +  " .single-img";
         this.my_single_img = $el(single_pointer);
 
     }else if (this.options.layout === 'gallery') {
-        const self = this;
-        const gallery_pointer =  "#" + self.id +  " .gallery-img";
+        var self = this;
+        var gallery_pointer =  "#" + self.id +  " .gallery-img";
         self.my_stage_imgs = $el(gallery_pointer);
         self.sidebar_imgs = $el(gallery_pointer);
         self.sidebar_imgs.forEach( function (item , i) {
@@ -515,16 +568,16 @@ Gks_lightbox.prototype.register_components = function () {
 
 // WARNING: this is test method
 Gks_lightbox.prototype.collecting_img = function () {
-  const self = this;
+  var self = this;
   self.imgs.forEach( function (sourceImg , i) {
 
     sourceImg.addEventListener('click' , function (e) {
       e.preventDefault();
-      self.desktop_paper.classList.remove('gks-overlay-hdn');
-      self.desktop_paper.classList.add(self.bgColor);
+      self.desktop_paper.removeClassName('gks-overlay-hdn');
+      self.desktop_paper.addClassName(self.bgColor);
       if (self.my_single_img) {
 
-         self.my_single_img.parentNode.classList.add('gks-first-look');
+         self.my_single_img.parentNode.className += ' gks-first-look';
          // self.my_single_img.setAttribute('src' , e.currentTarget.getAttribute('href') );
          console.log(e.currentTarget.getAttribute('href'));
          imgPreloader( sourceImg
@@ -570,83 +623,21 @@ Gks_lightbox.prototype.collecting_img = function () {
   });
 };
 
-// Gks_lightbox.prototype.collecting_img = function () {
-//   const self = this;
-//   self.imgs.forEach( function (sourceImg , i) {
-//
-//     sourceImg.addEventListener('click' , function (e) {
-//       e.preventDefault();
-//       self.desktop_paper.classList.remove('gks-overlay-hdn');
-//       self.desktop_paper.classList.add(self.bgColor);
-//       if (self.my_single_img) {
-//
-//          self.my_single_img.parentNode.classList.add('gks-first-look');
-//          // self.my_single_img.setAttribute('src' , e.currentTarget.getAttribute('href') );
-//
-//          if(imgPreloader(sourceImg ,  self.my_single_img , e.currentTarget.getAttribute('href') , preloadingSpinner )){
-//            setFirstPos(sourceImg ,  self.my_single_img , 'gks-first-look' );
-//          }
-//
-//
-//       self.my_single_img.addEventListener ( 'load' , singleLoadHandler );
-//
-//       function singleLoadHandler (){
-//         setSecPos( this , 'gks-first-look');
-//         self.my_single_img.removeEventListener('load' , singleLoadHandler);
-//       }
-//       }else if (self.my_stage_imgs) {
-//
-//         self.my_stage_imgs.forEach( (function (item , c) {
-//
-//           self.gksBoxSlide[c].style.transform = 'translate('+ self.windowWidth * (c-i) +'px , 0)';
-//           // updateSlideWidth(self , c , i);
-//           if (i === c) {
-//             self.activeSlide = c;
-//             item.parentNode.classList.add('gks-first-look');
-//
-//             if ( imgPreloader( sourceImg , item , e.currentTarget.getAttribute('href') , preloadingSpinner)) {
-//               setFirstPos(sourceImg , item , 'gks-first-look');
-//             }
-//
-//
-//             item.addEventListener( 'load' , multiLoadHandler );
-//
-//             function multiLoadHandler () {
-//               setSecPos( item , 'gks-first-look');
-//               item.removeEventListener('load' , multiLoadHandler);
-//             }
-//
-//           }else {
-//
-//             // item.setAttribute('src' , self.imgs[c].getAttribute('href') );
-//           }
-//
-//         }));
-//
-//       }
-//
-//       handelingScrolling(self.options.disableScrolling);
-//
-//       self.end_lightbox(self);
-//     });
-//   });
-// };
-
 Gks_lightbox.prototype.end_lightbox = function (self) {
-  // let style = null;
+  // var style = null;
    if (!self.isListenedBefore) {
-     let closeFrom = [  self.close_btn.item(0)
+     var closeFrom = [  self.close_btn.item(0)
                       , self.close_btn.item(1) , self.desktop_paper , self.overlayContainer
                       , self.gksBoxStage];
      if (self.gksBoxSlide.length > 1) {
-       let mySlides = Array.prototype.slice.call(self.gksBoxSlide);
+       var mySlides = Array.prototype.slice.call(self.gksBoxSlide);
        console.log(mySlides);
        closeFrom = closeFrom.concat(mySlides);
      }else {
        closeFrom.push(self.gksBoxSlide);
        console.log(closeFrom);
      }
-     for (let i = 0; i < closeFrom.length; i++) {
+     for (var i = 0; i < closeFrom.length; i++) {
        if (self.options.closeFromAnyWhere === false && i > 1) {
          break;
        }
@@ -657,8 +648,8 @@ Gks_lightbox.prototype.end_lightbox = function (self) {
            return;
          }
 
-         self.desktop_paper.classList.add('gks-overlay-hdn' );
-         document.body.removeMultipleClassNames(['disableScrolling' , 'compensate-for-scrolbar' ]);
+         self.desktop_paper.addClassName('gks-overlay-hdn' );
+         bodyElement.removeMultipleClassNames(['disableScrolling' , 'compensate-for-scrolbar' ]);
          remStyle('gks-scroll-styling');
      }
      if (i === closeFrom.length - 1) {
@@ -676,13 +667,13 @@ Gks_lightbox.prototype.set_defaults = function() {
 
 
 /*  https://www.youtube.com/watch?v=F8xANXY0kaU  */
- let s =  'https://www.youtube.com/watch?v=F8xANXY0kaU';
- let f =  'youtube.com/watch?v=';
+ var s =  'https://www.youtube.com/watch?v=F8xANXY0kaU';
+ var f =  'youtube.com/watch?v=';
   console.log(s.indexOf(f));
 
 // window.onload = function (){
   console.log("page loaded");
-  let tem =  '<!-- single image template --> <div class="overlay-container" > <div class="box-wrapper"> <div class="close-gks-box">&times;</div> <div class="gksbox-stage" > <div class="gksbox-slide" > <div class="gksbox-content"> <img class="single-img" src=""></div> </div> </div> <div class="img-numbering" ></div>  </div> </div>';
+  var tem =  '<!-- single image template --> <div class="overlay-container" > <div class="box-wrapper"> <div class="close-gks-box">&times;</div> <div class="gksbox-stage" > <div class="gksbox-slide" > <div class="gksbox-content"> <img class="single-img" src=""></div> </div> </div> <div class="img-numbering" ></div>  </div> </div>';
   new Gks_lightbox("gks_img1" , {layout: 'gallery' , closeFromAnyWhere: true } , "yellow");
   new Gks_lightbox("gks_img2" , {fitImagesInViewport: true , layout: 'single', closeFromAnyWhere: true } , "blue");
   new Gks_lightbox("gks_img3" , {layout: 'gallery' , closeFromAnyWhere: true } , "black");
