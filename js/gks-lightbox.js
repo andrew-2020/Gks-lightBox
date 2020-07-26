@@ -342,16 +342,16 @@ function start_up (parentImg , childImg ,  childImgName){
   let translatey2 = Math.round((windowHeight - height2) / 2 ) + 'px'  ;
   let scalex2 = width2 / parentImg.getBoundingClientRect().width;
   let scaley2 = height2 / parentImg.getBoundingClientRect().height;
-  let transform1 = 'transform: scale(1,1) translate('+ translatex1 + ',' + translatey1 + ') ;'
-  let transform2 = 'transform: scale(' + scalex2 + ',' + scaley2 +') translate(' + translatex2  + ','  + translatey2 + '  );'
-  // height2 = 'height:' + height2 + 'px;';
-  // width2 = 'width:'+  width2 + 'px;';
+  let transform1 = 'transform: translate('+ translatex1 + ',' + translatey1 + ') ;'
+  let transform2 = 'transform: translate(' + translatex2  + ','  + translatey2 + '  );'
+  height2 = 'height:' + height2 + 'px;';
+  width2 = 'width:'+  width2 + 'px;';
   let transition2 = 'transition: 300ms linear;';
 
-  let styling = '.' + childImgName + '{animation: imgIntro 3000ms forwards;' + height1 + width1 + '}';
-  styling += '@keyframes imgIntro {0%{' + transform1 +  '}'
-                                  + '5%{' + transform1 +  '}'
-                                  +'100%{' + transform2 + '}}'
+  let styling = '.' + childImgName + '{animation: imgIntro 500ms forwards;' +'}';
+  styling += '@keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
+                                  + '5%{' + transform1 +  height1 + width1 + '}'
+                                  +'100%{' + transform2 +  height2 + width2 + '}}'
 
   embedStyle('body' , 'introStyling' , styling);
 
