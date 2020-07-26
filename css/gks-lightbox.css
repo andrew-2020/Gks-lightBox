@@ -45,7 +45,8 @@
 
 }
 .hide-till-load {
-  visibility: hidden;
+  /* visibility: hidden; */
+  display: none;
 
 }
 .overlay-container {
@@ -135,5 +136,5 @@
   height: 100%;
 }
 @keyframes andrew {
-  
+
 }

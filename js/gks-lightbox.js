@@ -348,10 +348,31 @@ function start_up (parentImg , childImg ,  childImgName){
   width2 = 'width:'+  width2 + 'px;';
   let transition2 = 'transition: 300ms linear;';
 
-  let styling = '.' + childImgName + '{animation: imgIntro 500ms forwards;' +'}';
-  styling += '@keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
-                                  + '5%{' + transform1 +  height1 + width1 + '}'
-                                  +'100%{' + transform2 +  height2 + width2 + '}}'
+  let styling = '@keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
+  + '5%{' + transform1 +  height1 + width1 + '}'
+  +'100%{' + transform2 +  height2 + width2 + '}}';
+  // styling += '@-webkit-keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
+  // + '5%{' + transform1 +  height1 + width1 + '}'
+  // +'100%{' + transform2 +  height2 + width2 + '}}';
+  // styling += '@-moz-keyframes imgIntro {0%{' + transform1 +  height1 + width1 + '}'
+  // + '5%{' + transform1 +  height1 + width1 + '}'
+  // +'100%{' + transform2 +  height2 + width2 + '}}';
+  styling += '.' + childImgName + '{';
+  // styling += '-webkit-animation-duration: 0.5s;';
+  // styling += '-webkit-animation-name: imgIntro;';
+  // styling += '-webkit-animation-direction: normal;';
+  // styling += '-webkit-animation-fill-mode: forwards;';
+  // styling += '-moz-animation-name: imgIntro;';
+  // styling += '-moz-animation-duration: 0.5s;';
+  // styling += '-moz-animation-direction: normal;' ;
+  // styling += '-moz-animation-fill-mode: forwards;';
+  styling += '-webkit-' + transform2;
+  styling += height2;
+  styling += width2;
+  styling += 'animation-name: imgIntro;';
+  styling += 'animation-duration: 0.3s;';
+  styling += 'animation-direction: normal;';
+  styling += 'animation-fill-mode: forwards;' + '}'  ;
 
   embedStyle('body' , 'introStyling' , styling);
 
